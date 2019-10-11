@@ -18,13 +18,13 @@ class LatControlPID():
   def reset(self):
     self.pid.reset()
 
-  def update(self, active, v_ego, angle_steers, angle_steers_rate, eps_torque, steer_override, CP, path_plan, wheel_speeds):
+  def update(self, active, v_ego, angle_steers, angle_steers_rate, eps_torque, steer_override, CP, path_plan):
     # virtualZSS
     stock_angle = float(angle_steers)
     if self.ZSS.can_predict():  # will use stock sensor until past 20 samples have been saved
       angle_steers = self.ZSS.predict()
 
-      self.ZSS.save_sample([stock_angle, self.output_steer, wheel_speeds.fl, wheel_speeds.fr, wheel_speeds.rl, wheel_speeds.rr])
+      self.ZSS.save_sample([stock_angle, self.output_steer])
 
     pid_log = log.ControlsState.LateralPIDState.new_message()
     pid_log.steerAngle = float(angle_steers)
